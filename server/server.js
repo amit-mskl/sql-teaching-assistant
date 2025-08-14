@@ -1,18 +1,27 @@
 import express from 'express';
 import Anthropic from '@anthropic-ai/sdk';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 5000;
 
 const anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY
 });
 
 app.use(express.json());
-app.use(express.static('.'));
 
-app.post('/chat', async (req, res) => {
+// Serve static files from the React build directory
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// API routes
+app.use('/api', express.Router());
+
+app.post('/api/chat', async (req, res) => {
     try {
         const { messages } = req.body;
         
