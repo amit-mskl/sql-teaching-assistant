@@ -152,3 +152,24 @@
 .login-footer p {
   margin: 4px 0;
 }
+
+.link-button {
+  background: none;
+  border: none;
+  color: #667eea;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  transition: color 0.2s;
+}
+
+.link-button:hover:not(:disabled) {
+  color: #5a6fd8;
+}
+
+.link-button:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}

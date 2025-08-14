@@ -54,6 +54,45 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Register function - Create new user account
+  const register = async (email, password, firstName, lastName = '') => {
+    setIsLoading(true);
+    try {
+      console.log('🔄 Registration attempt:', email);
+      
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, firstName, lastName }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Successfully registered with backend
+        console.log('✅ Registration successful:', data.user.name);
+        
+        setUser(data.user);
+        setToken(data.token);
+        localStorage.setItem('owlstein_token', data.token);
+        localStorage.setItem('owlstein_user', JSON.stringify(data.user));
+        
+        return { success: true };
+      } else {
+        // Registration failed - show backend error message
+        console.log('❌ Registration failed:', data.error);
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      console.error('💥 Registration network error:', error);
+      return { success: false, error: 'Unable to connect to server. Please try again.' };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Logout function - Now calls backend API
   const logout = async () => {
     try {
@@ -104,6 +143,7 @@ export const AuthProvider = ({ children }) => {
     isLoading,
     isAuthenticated,
     login,
+    register,
     logout
   };
 

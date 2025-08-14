@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
 
-const Login = () => {
+const Login = ({ onSwitchToSignup }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,11 +21,6 @@ const Login = () => {
     if (!result.success) {
       setError(result.error);
     }
-  };
-
-  const fillDemoCredentials = () => {
-    setEmail('demo@owlstein.com');
-    setPassword('password123');
   };
 
   return (
@@ -73,21 +68,18 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="login-demo">
-          <p>Try the demo:</p>
-          <button 
-            type="button" 
-            onClick={fillDemoCredentials}
-            className="demo-button"
-            disabled={isLoading}
-          >
-            Use Demo Account
-          </button>
-        </div>
-
         <div className="login-footer">
-          <p>Phase A: Hardcoded Users Demo</p>
-          <p>Email: demo@owlstein.com | Password: password123</p>
+          <p>
+            Don't have an account?{' '}
+            <button 
+              type="button" 
+              onClick={onSwitchToSignup}
+              className="link-button"
+              disabled={isLoading}
+            >
+              Sign Up
+            </button>
+          </p>
         </div>
       </div>
     </div>

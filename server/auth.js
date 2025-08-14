@@ -1,44 +1,51 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { userDb } from './database.js';
 
-// PHASE A: HARDCODED USERS (for learning)
-// In real apps, these would come from a database
-const HARDCODED_USERS = [
-  {
-    id: 1,
-    name: "Demo User",
-    email: "demo@owlstein.com",
-    // Password: "password123" (hashed with bcrypt)
-    password: "$2b$10$CssSR2Wek8rUwoONZpZ4S.gF.o1C1zui8QE4p8yiYYkIpMG0Qdyfm"
-  },
-  {
-    id: 2,
-    name: "Test User", 
-    email: "test@owlstein.com",
-    // Password: "test123" (hashed with bcrypt)
-    password: "$2b$10$t00sHw0WeStXQX5V4yynHuR77wdWNlFThZQj00r5/KbrX/TB6w1h."
-  }
-];
+// PHASE C: SQLITE DATABASE AUTHENTICATION
+// Now using real database instead of hardcoded users!
 
-// JWT Secret (in real apps, this goes in .env file)
+// JWT Secret (should be in .env file for production)
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this';
 
-// Helper Functions
+// Helper Functions - Now using real database!
 export const authService = {
   
-  // Find user by email (simulates database lookup)
-  findUserByEmail: (email) => {
-    console.log(`🔍 Looking for user with email: ${email}`);
-    const user = HARDCODED_USERS.find(user => user.email === email);
-    console.log(`${user ? '✅ User found' : '❌ User not found'}`);
-    return user;
+  // Find user by email (real database lookup)
+  findUserByEmail: async (email) => {
+    console.log(`🔍 Database lookup for user: ${email}`);
+    try {
+      const user = await userDb.findByEmail(email);
+      return user;
+    } catch (error) {
+      console.error('❌ Database error in findUserByEmail:', error);
+      return null;
+    }
   },
 
-  // Find user by ID (simulates database lookup)
-  findUserById: (id) => {
-    console.log(`🔍 Looking for user with ID: ${id}`);
-    const user = HARDCODED_USERS.find(user => user.id === parseInt(id));
-    return user;
+  // Find user by ID (real database lookup)
+  findUserById: async (id) => {
+    console.log(`🔍 Database lookup for user ID: ${id}`);
+    try {
+      const user = await userDb.findById(id);
+      return user;
+    } catch (error) {
+      console.error('❌ Database error in findUserById:', error);
+      return null;
+    }
+  },
+
+  // Create new user (register)
+  createUser: async (email, password, firstName, lastName = null) => {
+    console.log(`👤 Creating new user: ${email}`);
+    try {
+      const passwordHash = await authService.hashPassword(password);
+      const user = await userDb.create(email, passwordHash, firstName, lastName);
+      return user;
+    } catch (error) {
+      console.error('❌ Database error in createUser:', error);
+      throw error;
+    }
   },
 
   // Hash password (for when we add signup later)
@@ -62,7 +69,9 @@ export const authService = {
     const payload = {
       userId: user.id,
       email: user.email,
-      name: user.name
+      name: user.display_name, // Using display_name from database
+      firstName: user.first_name,
+      lastName: user.last_name
     };
     return jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
   },

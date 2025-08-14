@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { authService, requireAuth } from './auth.js';
+import { initDatabase, userDb } from './database.js';
 
 dotenv.config();
 
@@ -35,19 +36,22 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ error: 'Email and password are required' });
         }
 
-        // Find user
-        const user = authService.findUserByEmail(email);
+        // Find user in database
+        const user = await authService.findUserByEmail(email);
         if (!user) {
-            console.log('❌ User not found');
+            console.log('❌ User not found in database');
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         // Verify password
-        const isValidPassword = await authService.verifyPassword(password, user.password);
+        const isValidPassword = await authService.verifyPassword(password, user.password_hash);
         if (!isValidPassword) {
             console.log('❌ Invalid password');
             return res.status(401).json({ error: 'Invalid email or password' });
         }
+
+        // Update last login timestamp
+        await userDb.updateLastLogin(user.id);
 
         // Generate JWT token
         const token = authService.generateToken(user);
@@ -58,7 +62,7 @@ app.post('/api/login', async (req, res) => {
             token,
             user: {
                 id: user.id,
-                name: user.name,
+                name: user.display_name,
                 email: user.email
             }
         });
@@ -79,6 +83,53 @@ app.get('/api/me', requireAuth, (req, res) => {
             email: req.user.email
         }
     });
+});
+
+// User registration
+app.post('/api/register', async (req, res) => {
+    console.log('\n📝 Registration attempt:', req.body.email);
+    
+    try {
+        const { email, password, firstName, lastName } = req.body;
+
+        // Validate input
+        if (!email || !password || !firstName) {
+            console.log('❌ Missing required fields');
+            return res.status(400).json({ error: 'Email, password, and first name are required' });
+        }
+
+        // Check if user already exists
+        const existingUser = await authService.findUserByEmail(email);
+        if (existingUser) {
+            console.log('❌ User already exists');
+            return res.status(409).json({ error: 'User already exists with this email' });
+        }
+
+        // Create new user
+        const newUser = await authService.createUser(email, password, firstName, lastName);
+        
+        // Generate JWT token
+        const token = authService.generateToken(newUser);
+        
+        console.log('✅ Registration successful');
+        res.status(201).json({
+            message: 'Registration successful',
+            token,
+            user: {
+                id: newUser.id,
+                name: newUser.display_name,
+                email: newUser.email
+            }
+        });
+
+    } catch (error) {
+        console.error('💥 Registration error:', error);
+        if (error.message === 'EMAIL_EXISTS') {
+            res.status(409).json({ error: 'User already exists with this email' });
+        } else {
+            res.status(500).json({ error: 'Server error during registration' });
+        }
+    }
 });
 
 // Logout (client-side token removal, but we can log it)
@@ -132,6 +183,21 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+// Initialize database and start server
+async function startServer() {
+    try {
+        console.log('🚀 Initializing database...');
+        await initDatabase();
+        console.log('✅ Database initialized');
+
+        app.listen(port, () => {
+            console.log(`Server running at http://localhost:${port}`);
+            console.log('🦉 Owlstein, the SQL AI Buddy is ready!');
+        });
+    } catch (error) {
+        console.error('❌ Failed to start server:', error);
+        process.exit(1);
+    }
+}
+
+startServer();
