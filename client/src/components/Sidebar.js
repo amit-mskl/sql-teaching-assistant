@@ -1,7 +1,9 @@
 import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
-const Sidebar = ({ onNewChat, sessionTokens, showTokens }) => {
+const Sidebar = ({ onNewChat, sessionTokens, showTokens, userName }) => {
+  const { logout } = useAuth();
   const formatTokens = (tokens) => {
     return tokens.toLocaleString();
   };
@@ -17,8 +19,15 @@ const Sidebar = ({ onNewChat, sessionTokens, showTokens }) => {
 
   return (
     <div className="sidebar">
-      <h1>🦉 Owlstein - The Learning Assistant</h1>
-      <p>Your friendly guide to mastering SQL</p>
+      <h1>🦉 Owlstein</h1>
+      <p>Your SQL AI Buddy</p>
+      
+      <div className="user-info">
+        <div className="user-welcome">Welcome, {userName}!</div>
+        <button className="logout-btn" onClick={logout}>
+          Sign Out
+        </button>
+      </div>
       
       <button className="new-chat-btn" onClick={onNewChat}>
         + New Chat

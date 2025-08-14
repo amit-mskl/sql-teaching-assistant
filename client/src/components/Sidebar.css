@@ -20,7 +20,38 @@
 .sidebar p {
   font-size: 14px;
   color: #666;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+}
+
+.user-info {
+  background: #f0f0f0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.user-welcome {
+  font-size: 13px;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.logout-btn {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.logout-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
 }
 
 .new-chat-btn {
