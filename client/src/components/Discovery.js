@@ -40,20 +40,22 @@ const Discovery = () => {
       
       {/* Courses Grid */}
       <div className="courses-grid">
-        {/* SQL Course Card */}
-        <div className="learning-card sql" onClick={startSQLCourse}>
+        {/* Tony Stark SQL Mentor Card */}
+        <div className="learning-card tony-stark" onClick={startSQLCourse}>
           <div className="card-header">
-            <div className="card-icons">
-              <div className="icon">SQL</div>
-              <div className="icon">📊</div>
+            <div className="avatar-section">
+              <div className="avatar-icon">🤖</div>
+              <div className="avatar-name">Tony Stark</div>
             </div>
-            <div className="card-badge badge-ai">🤖 AI-Guided</div>
+            <div className="card-badge badge-genius">⚡ Genius</div>
           </div>
-          <div className="card-title">Data Analysis using SQL</div>
+          <div className="card-title">Database Architecture & SQL Mastery</div>
+          <div className="card-subtitle">Learn from the genius billionaire engineer</div>
           <div className="card-meta">
-            <span>📚 5 Modules</span>
+            <span>🛠️ Workshop Style</span>
             <span>⏱️ 3-4 hours</span>
           </div>
+          <div className="card-expertise">Advanced SQL • Database Optimization • Data Architecture</div>
         </div>
         
         {/* React Course Card */}

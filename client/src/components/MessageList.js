@@ -1,7 +1,7 @@
 import React from 'react';
 import Message from './Message';
 
-const MessageList = ({ messages }) => {
+const MessageList = ({ messages, course = 'sql' }) => {
   return (
     <>
       {messages.map((message, index) => (
@@ -9,6 +9,7 @@ const MessageList = ({ messages }) => {
           key={index}
           content={message.content}
           isUser={message.role === 'user'}
+          course={course}
         />
       ))}
     </>

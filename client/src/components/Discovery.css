@@ -106,7 +106,8 @@
   border-color: var(--card-color);
 }
 
-.learning-card.sql { --card-color: #2563eb; }
+/* Avatar-specific styling */
+.learning-card.tony-stark { --card-color: #FFD700; }
 .learning-card.react { --card-color: #059669; }
 .learning-card.python { --card-color: #eab308; }
 
@@ -167,4 +168,61 @@
   gap: 16px;
   font-size: 13px;
   color: #64748b;
+}
+
+/* Avatar-specific styling */
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #1a1a1a;
+  font-weight: bold;
+}
+
+.avatar-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--card-color);
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.card-expertise {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.badge-genius {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+/* Tony Stark specific theming */
+.learning-card.tony-stark {
+  background: linear-gradient(135deg, #fefefe 0%, #fff8e1 100%);
+  border: 1px solid #FFD700;
+}
+
+.learning-card.tony-stark:hover {
+  box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
 }

@@ -84,6 +84,7 @@ const ChatApp = ({ course = 'sql' }) => {
         sessionTokens={sessionTokens}
         showTokens={sessionTokens > 0}
         userName={user?.name}
+        course={course}
       />
       <ChatInterface 
         messages={conversationHistory}

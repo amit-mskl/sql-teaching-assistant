@@ -1,6 +1,17 @@
 import React from 'react';
 
-const Message = ({ content, isUser }) => {
+const Message = ({ content, isUser, course = 'sql' }) => {
+  const getCourseBranding = (courseId) => {
+    switch(courseId) {
+      case 'sql':
+        return { avatar: '🤖' };
+      default:
+        return { avatar: '🦉' };
+    }
+  };
+
+  const branding = getCourseBranding(course);
+
   const formatMessage = (content) => {
     return content
       // Handle headings
@@ -34,7 +45,7 @@ const Message = ({ content, isUser }) => {
         </div>
       ) : (
         <>
-          <div className="message-avatar">S</div>
+          <div className="message-avatar">{branding.avatar}</div>
           <div 
             className="message-content"
             dangerouslySetInnerHTML={{ __html: formatMessage(content) }}

@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
-const Sidebar = ({ onNewChat, sessionTokens, showTokens, userName }) => {
+const Sidebar = ({ onNewChat, sessionTokens, showTokens, userName, course = 'sql' }) => {
   const { logout } = useAuth();
   const formatTokens = (tokens) => {
     return tokens.toLocaleString();
@@ -17,10 +17,29 @@ const Sidebar = ({ onNewChat, sessionTokens, showTokens, userName }) => {
     return ((tokens / 1000) * avgCost).toFixed(4);
   };
 
+  const getCourseBranding = (courseId) => {
+    switch(courseId) {
+      case 'sql':
+        return {
+          name: 'Tony Stark',
+          title: 'Genius Database Architect',
+          avatar: '🤖'
+        };
+      default:
+        return {
+          name: 'Owlstein',
+          title: 'Your AI Learning Buddy',
+          avatar: '🦉'
+        };
+    }
+  };
+
+  const branding = getCourseBranding(course);
+
   return (
     <div className="sidebar">
-      <h1>🦉 Owlstein</h1>
-      <p>Your AI Learning Buddy</p>
+      <h1>{branding.avatar} {branding.name}</h1>
+      <p>{branding.title}</p>
       
       <div className="user-info">
         <div className="user-welcome">Welcome, {userName}!</div>
