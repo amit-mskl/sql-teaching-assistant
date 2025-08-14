@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import ChatApp from './components/ChatApp';
+import Discovery from './components/Discovery';
 
 // Authentication wrapper for protected routes
 const AuthenticatedRoute = ({ children }) => {
@@ -33,8 +34,12 @@ const AppContent = () => {
         </AuthenticatedRoute>
       } />
       
-      {/* Platform routes will be added here */}
-      {/* <Route path="/platform" element={<Discovery />} /> */}
+      {/* Platform routes */}
+      <Route path="/platform" element={
+        <AuthenticatedRoute>
+          <Discovery />
+        </AuthenticatedRoute>
+      } />
       {/* <Route path="/platform/sql" element={<SQLCourse />} /> */}
     </Routes>
   );
