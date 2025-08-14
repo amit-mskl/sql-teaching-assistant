@@ -7,7 +7,7 @@ const ChatApp = () => {
   const [conversationHistory, setConversationHistory] = useState([]);
   const [sessionTokens, setSessionTokens] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const startNewChat = () => {
     setConversationHistory([]);
@@ -24,6 +24,7 @@ const ChatApp = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ messages: newHistory }),
       });

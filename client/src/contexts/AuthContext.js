@@ -15,44 +15,67 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('owlstein_token'));
   const [isLoading, setIsLoading] = useState(false);
 
-  // Login function (will connect to API later)
+  // Login function - Now connected to real API!
   const login = async (email, password) => {
     setIsLoading(true);
     try {
-      // TODO: Connect to API in Step 3
-      console.log('🔄 Login attempt:', email);
+      console.log('🔄 Real API login attempt:', email);
       
-      // For now, simulate successful login
-      if (email === 'demo@owlstein.com' && password === 'password123') {
-        const mockUser = { id: 1, name: 'Demo User', email };
-        const mockToken = 'mock_jwt_token_for_demo';
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Successfully authenticated with backend
+        console.log('✅ Real login successful:', data.user.name);
         
-        setUser(mockUser);
-        setToken(mockToken);
-        localStorage.setItem('owlstein_token', mockToken);
-        localStorage.setItem('owlstein_user', JSON.stringify(mockUser));
+        setUser(data.user);
+        setToken(data.token);
+        localStorage.setItem('owlstein_token', data.token);
+        localStorage.setItem('owlstein_user', JSON.stringify(data.user));
         
-        console.log('✅ Mock login successful');
         return { success: true };
       } else {
-        console.log('❌ Mock login failed');
-        return { success: false, error: 'Invalid email or password' };
+        // Login failed - show backend error message
+        console.log('❌ Login failed:', data.error);
+        return { success: false, error: data.error };
       }
     } catch (error) {
-      console.error('Login error:', error);
-      return { success: false, error: 'Login failed' };
+      console.error('💥 Login network error:', error);
+      return { success: false, error: 'Unable to connect to server. Please try again.' };
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Logout function
-  const logout = () => {
-    console.log('👋 Logging out');
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('owlstein_token');
-    localStorage.removeItem('owlstein_user');
+  // Logout function - Now calls backend API
+  const logout = async () => {
+    try {
+      console.log('👋 Logging out');
+      
+      // Call logout API (optional - mainly for logging)
+      await fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+      });
+    } catch (error) {
+      console.log('Logout API call failed, but continuing with local logout');
+    } finally {
+      // Always clear local storage regardless of API call success
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem('owlstein_token');
+      localStorage.removeItem('owlstein_user');
+    }
   };
 
   // Check if user is logged in
