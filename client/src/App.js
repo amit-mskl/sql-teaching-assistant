@@ -40,7 +40,11 @@ const AppContent = () => {
           <Discovery />
         </AuthenticatedRoute>
       } />
-      {/* <Route path="/platform/sql" element={<SQLCourse />} /> */}
+      <Route path="/platform/sql" element={
+        <AuthenticatedRoute>
+          <ChatApp />
+        </AuthenticatedRoute>
+      } />
     </Routes>
   );
 };

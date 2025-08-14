@@ -1,7 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Discovery.css';
 
 const Discovery = () => {
+  const navigate = useNavigate();
+  
+  const startSQLCourse = () => {
+    navigate('/platform/sql');
+  };
+  
   return (
     <div className="discovery-container">
       {/* Header Section */}
@@ -26,7 +33,7 @@ const Discovery = () => {
       {/* Courses Grid */}
       <div className="courses-grid">
         {/* SQL Course Card */}
-        <div className="learning-card sql">
+        <div className="learning-card sql" onClick={startSQLCourse}>
           <div className="card-header">
             <div className="card-icons">
               <div className="icon">SQL</div>
