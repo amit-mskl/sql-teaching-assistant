@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { authService, requireAuth } from './auth.js';
 import { initDatabase, userDb, chatDb } from './database.js';
+import { generateOwlsteinPrompt, getCourseWelcome } from './courseContexts.js';
 
 dotenv.config();
 
@@ -138,13 +139,27 @@ app.post('/api/logout', (req, res) => {
     res.json({ message: 'Logged out successfully' });
 });
 
+// Get course welcome message
+app.get('/api/course/:courseId/welcome', requireAuth, (req, res) => {
+    const courseId = req.params.courseId;
+    const welcomeMessage = getCourseWelcome(courseId);
+    
+    console.log(`🎓 Course welcome requested: ${courseId} for user ${req.user.email}`);
+    
+    res.json({ 
+        course: courseId,
+        welcome: welcomeMessage 
+    });
+});
+
 // Chat API route (now protected - requires login with database logging)
 app.post('/api/chat', requireAuth, async (req, res) => {
     try {
-        const { messages } = req.body;
+        const { messages, course } = req.body;
         const userId = req.user.userId;
+        const courseId = course || 'sql'; // Default to SQL if no course specified
         
-        console.log(`\n💬 Chat request from user ${userId} (${req.user.email})`);
+        console.log(`\n💬 Chat request from user ${userId} (${req.user.email}) - Course: ${courseId}`);
         
         // Get or create current chat session
         const session = await chatDb.getOrCreateCurrentSession(userId);
@@ -157,23 +172,14 @@ app.post('/api/chat', requireAuth, async (req, res) => {
             await chatDb.saveMessage(session.id, 'user', userMessage.content);
         }
         
-        // Call Anthropic API
+        // Generate course-specific system prompt for Universal Owlstein
+        const systemPrompt = generateOwlsteinPrompt(courseId);
+        
+        // Call Anthropic API with Universal Owlstein
         const message = await anthropic.messages.create({
             model: 'claude-sonnet-4-20250514',
             max_tokens: 500,
-            system: `You are a friendly SQL teaching assistant named Owlstein SQL Assistant.     
-            Your role:
-            - Be patient and encouraging with students
-            - Explain concepts step-by-step
-            - Always provide working SQL examples
-            - Ask follow-up questions to check understanding
-            - Use simple language for beginners
-            
-            When helping students:
-            - Do not spit out answers easily. Give chance or clues to think better
-            - Break down complex queries into parts
-            - Explain the logic behind each SQL statement
-            - Suggest best practices`,
+            system: systemPrompt,
             messages: messages
         });
 
