@@ -76,7 +76,12 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, course = 'sql' }) =
         <div ref={messagesEndRef} />
       </div>
       
-      <ChatInput onSendMessage={onSendMessage} disabled={isLoading} course={course} />
+      <ChatInput 
+        onSendMessage={onSendMessage} 
+        disabled={isLoading} 
+        course={course}
+        latestMessage={messages.length > 0 ? messages[messages.length - 1] : null}
+      />
     </div>
   );
 };

@@ -232,3 +232,353 @@
 .chat-messages::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
+
+/* SQL Execution Styles */
+.sql-execution-area {
+  margin-top: 16px;
+  border-top: 1px solid #e5e5e5;
+  padding-top: 16px;
+}
+
+.sql-executing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #666;
+  font-size: 14px;
+}
+
+.sql-executing .sql-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.sql-result {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.sql-result.success {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.sql-result.error {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.sql-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+.sql-result.success .sql-header {
+  background: #ecfdf5;
+  border-bottom-color: #10b981;
+}
+
+.sql-result.error .sql-header {
+  background: #fef2f2;
+  border-bottom-color: #ef4444;
+}
+
+.sql-timing {
+  margin-left: auto;
+  color: #666;
+  font-weight: normal;
+  font-size: 12px;
+}
+
+.sql-error {
+  padding: 12px 16px;
+  color: #dc2626;
+  font-family: 'SF Mono', Monaco, 'Roboto Mono', monospace;
+  font-size: 13px;
+}
+
+.sql-message {
+  padding: 12px 16px;
+  color: #059669;
+  font-size: 14px;
+}
+
+.sql-table-container {
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.sql-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: 'SF Mono', Monaco, 'Roboto Mono', monospace;
+}
+
+.sql-table th {
+  background: #1f2937;
+  color: #f9fafb;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid #374151;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.sql-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.sql-table tr:hover td {
+  background: #f9fafb;
+}
+
+.sql-table tr:nth-child(even) td {
+  background: #f8fafc;
+}
+
+.sql-table tr:nth-child(even):hover td {
+  background: #f1f5f9;
+}
+
+/* Monaco SQL Editor Styles */
+.sql-editor-container {
+  margin: 16px 0;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1e1e1e;
+}
+
+.sql-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  border-bottom: 1px solid #4b5563;
+}
+
+.sql-editor-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f9fafb;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sql-hint {
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+.sql-execute-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sql-execute-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(251, 191, 36, 0.3);
+}
+
+.sql-execute-btn:disabled {
+  background: #6b7280;
+  color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.sql-execute-btn.executing {
+  background: #10b981;
+  color: white;
+}
+
+.sql-spinner {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.monaco-editor-wrapper {
+  position: relative;
+}
+
+/* Override Monaco Editor styles for better integration */
+.monaco-editor .suggest-widget {
+  background: #252526 !important;
+  border: 1px solid #454545 !important;
+}
+
+.monaco-editor .suggest-widget .monaco-list .monaco-list-row {
+  background: transparent !important;
+}
+
+.monaco-editor .suggest-widget .monaco-list .monaco-list-row:hover {
+  background: #2a2d2e !important;
+}
+
+.monaco-editor .suggest-widget .monaco-list .monaco-list-row.focused {
+  background: #094771 !important;
+}
+
+/* Enhanced Chat Input with Editor Modes */
+.editor-mode-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 12px 12px 0 0;
+}
+
+.mode-selector {
+  display: flex;
+  gap: 4px;
+}
+
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.mode-btn.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.mode-btn.active:hover {
+  background: #2563eb;
+}
+
+.sql-mode-hint {
+  font-size: 12px;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.chat-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.monaco-input-wrapper {
+  flex: 1;
+  border: 1px solid #d1d5db;
+  border-right: none;
+  border-radius: 0 0 0 12px;
+  overflow: hidden;
+  background: white;
+}
+
+.input-actions {
+  display: flex;
+  align-items: stretch;
+}
+
+.send-button {
+  border-radius: 0 0 12px 0;
+  border-left: none;
+  height: auto;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+
+.send-button.sql-mode {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid #3b82f6;
+  min-width: 100px;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  transition: all 0.2s ease;
+}
+
+.send-button.sql-mode:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.send-button.sql-mode:disabled {
+  background: #9ca3af;
+  color: #6b7280;
+  border: 1px solid #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Update existing chat input for plain mode */
+.chat-input-container .chat-input {
+  border-radius: 0 0 12px 12px;
+  border-top: none;
+}
+
+.chat-input-container:not(.has-mode-header) .chat-input {
+  border-radius: 12px;
+  border-top: 1px solid #d1d5db;
+}
+
+.chat-input-container:not(.has-mode-header) .editor-mode-header {
+  display: none;
+}

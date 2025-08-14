@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { authService, requireAuth } from './auth.js';
 import { initDatabase, userDb, chatDb } from './database.js';
 import { generateOwlsteinPrompt, getCourseWelcome } from './courseContexts.js';
+import { executeSQL, getDatabaseSchema } from './sqlExecutor.js';
 
 dotenv.config();
 
@@ -149,6 +150,46 @@ app.get('/api/course/:courseId/welcome', requireAuth, (req, res) => {
     res.json({ 
         course: courseId,
         welcome: welcomeMessage 
+    });
+});
+
+// Tony Stark's Workshop: Execute SQL queries
+app.post('/api/execute-sql', requireAuth, async (req, res) => {
+    const { query, course } = req.body;
+    const userId = req.user.userId;
+    
+    // Only allow SQL execution in Tony Stark's course
+    if (course !== 'sql') {
+        return res.status(403).json({ 
+            error: 'SQL execution is only available in Tony Stark\'s workshop' 
+        });
+    }
+    
+    console.log(`🤖 Tony's Workshop: SQL execution for user ${req.user.email}`);
+    console.log(`Query: ${query}`);
+    
+    const result = await executeSQL(query);
+    
+    res.json({
+        success: result.success,
+        results: result.results,
+        error: result.error,
+        executionTime: result.executionTime,
+        rowCount: result.rowCount,
+        workshop: 'Tony Stark\'s SQL Workshop'
+    });
+});
+
+// Get database schema for Tony's workshop
+app.get('/api/database-schema', requireAuth, async (req, res) => {
+    console.log(`🔧 Database schema requested by ${req.user.email}`);
+    
+    const schema = await getDatabaseSchema();
+    
+    res.json({
+        schema: schema,
+        workshop: 'Tony Stark\'s SQL Workshop',
+        message: 'FRIDAY: Database schema loaded. Ready for query optimization.'
     });
 });
 
