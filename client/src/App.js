@@ -42,7 +42,17 @@ const AppContent = () => {
       } />
       <Route path="/platform/sql" element={
         <AuthenticatedRoute>
-          <ChatApp />
+          <ChatApp course="sql" />
+        </AuthenticatedRoute>
+      } />
+      <Route path="/platform/react" element={
+        <AuthenticatedRoute>
+          <ChatApp course="react" />
+        </AuthenticatedRoute>
+      } />
+      <Route path="/platform/python" element={
+        <AuthenticatedRoute>
+          <ChatApp course="python" />
         </AuthenticatedRoute>
       } />
     </Routes>

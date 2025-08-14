@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 
-const ChatInput = ({ onSendMessage, disabled }) => {
+const ChatInput = ({ onSendMessage, disabled, course = 'sql' }) => {
   const [message, setMessage] = useState('');
+  
+  const getCoursePlaceholder = (courseId) => {
+    const courseNames = {
+      sql: 'Data Analysis using SQL',
+      react: 'E-commerce App with React & Node',
+      python: 'Data Science Foundation',
+      excel: 'Excel Essentials'
+    };
+    const courseName = courseNames[courseId] || courseId;
+    return `Ask me anything about the course - ${courseName}`;
+  };
 
   const handleSubmit = () => {
     if (!message.trim() || disabled) return;
@@ -32,7 +43,7 @@ const ChatInput = ({ onSendMessage, disabled }) => {
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           className="chat-input" 
-          placeholder="Ask me about SQL, databases, queries..."
+          placeholder={getCoursePlaceholder(course)}
           rows="1"
           disabled={disabled}
         />

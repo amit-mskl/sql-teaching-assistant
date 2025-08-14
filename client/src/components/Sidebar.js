@@ -20,7 +20,7 @@ const Sidebar = ({ onNewChat, sessionTokens, showTokens, userName }) => {
   return (
     <div className="sidebar">
       <h1>🦉 Owlstein</h1>
-      <p>Your SQL AI Buddy</p>
+      <p>Your AI Learning Buddy</p>
       
       <div className="user-info">
         <div className="user-welcome">Welcome, {userName}!</div>

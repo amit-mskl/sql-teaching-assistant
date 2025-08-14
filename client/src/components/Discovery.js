@@ -9,6 +9,14 @@ const Discovery = () => {
     navigate('/platform/sql');
   };
   
+  const startReactCourse = () => {
+    navigate('/platform/react');
+  };
+  
+  const startPythonCourse = () => {
+    navigate('/platform/python');
+  };
+  
   return (
     <div className="discovery-container">
       {/* Header Section */}
@@ -48,8 +56,8 @@ const Discovery = () => {
           </div>
         </div>
         
-        {/* Placeholder for other courses */}
-        <div className="learning-card react" style={{opacity: 0.5}}>
+        {/* React Course Card */}
+        <div className="learning-card react" onClick={startReactCourse}>
           <div className="card-header">
             <div className="card-icons">
               <div className="icon">⚛️</div>
@@ -64,7 +72,8 @@ const Discovery = () => {
           </div>
         </div>
         
-        <div className="learning-card python" style={{opacity: 0.5}}>
+        {/* Python Course Card */}
+        <div className="learning-card python" onClick={startPythonCourse}>
           <div className="card-header">
             <div className="card-icons">
               <div className="icon">🐍</div>

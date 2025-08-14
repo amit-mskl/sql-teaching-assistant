@@ -3,7 +3,7 @@ import './ChatInterface.css';
 import MessageList from './MessageList';
 import ChatInput from './ChatInput';
 
-const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
+const ChatInterface = ({ messages, onSendMessage, isLoading, course = 'sql' }) => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -45,7 +45,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading }) => {
         <div ref={messagesEndRef} />
       </div>
       
-      <ChatInput onSendMessage={onSendMessage} disabled={isLoading} />
+      <ChatInput onSendMessage={onSendMessage} disabled={isLoading} course={course} />
     </div>
   );
 };
