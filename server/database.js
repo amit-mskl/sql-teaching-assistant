@@ -270,6 +270,105 @@ export const chatDb = {
         }
       });
     });
+  },
+
+  // Get or create current session for user
+  getOrCreateCurrentSession: async (userId) => {
+    return new Promise((resolve, reject) => {
+      console.log(`🗨️ Getting current session for user ${userId}`);
+      
+      // First, try to get the most recent session
+      db.get(`
+        SELECT id, title, created_at, updated_at 
+        FROM chat_sessions 
+        WHERE user_id = ? 
+        ORDER BY updated_at DESC 
+        LIMIT 1
+      `, [userId], async (err, row) => {
+        if (err) {
+          console.error('❌ Error getting session:', err);
+          reject(err);
+        } else if (row) {
+          console.log(`✅ Found existing session: ${row.id}`);
+          resolve(row);
+        } else {
+          console.log('📝 Creating new session for user');
+          try {
+            const newSession = await chatDb.createSession(userId, 'SQL Chat Session');
+            resolve(newSession);
+          } catch (createErr) {
+            reject(createErr);
+          }
+        }
+      });
+    });
+  },
+
+  // Update session timestamp
+  updateSessionTimestamp: async (sessionId) => {
+    return new Promise((resolve, reject) => {
+      db.run(`
+        UPDATE chat_sessions 
+        SET updated_at = CURRENT_TIMESTAMP 
+        WHERE id = ?
+      `, [sessionId], (err) => {
+        if (err) {
+          console.error('❌ Error updating session timestamp:', err);
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  },
+
+  // Save message to database
+  saveMessage: async (sessionId, role, content, tokensUsed = null) => {
+    return new Promise((resolve, reject) => {
+      console.log(`💾 Saving ${role} message to session ${sessionId}`);
+      
+      const stmt = db.prepare(`
+        INSERT INTO messages (session_id, role, content, tokens_used) 
+        VALUES (?, ?, ?, ?)
+      `);
+      
+      stmt.run([sessionId, role, content, tokensUsed], function(err) {
+        if (err) {
+          console.error('❌ Error saving message:', err);
+          reject(err);
+        } else {
+          console.log(`✅ Message saved with ID: ${this.lastID}`);
+          resolve({
+            id: this.lastID,
+            session_id: sessionId,
+            role,
+            content,
+            tokens_used: tokensUsed
+          });
+        }
+      });
+      
+      stmt.finalize();
+    });
+  },
+
+  // Get messages for a session
+  getSessionMessages: async (sessionId) => {
+    return new Promise((resolve, reject) => {
+      db.all(`
+        SELECT id, role, content, tokens_used, created_at 
+        FROM messages 
+        WHERE session_id = ? 
+        ORDER BY created_at ASC
+      `, [sessionId], (err, rows) => {
+        if (err) {
+          console.error('❌ Error getting messages:', err);
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
   }
 };
 

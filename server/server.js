@@ -4,7 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { authService, requireAuth } from './auth.js';
-import { initDatabase, userDb } from './database.js';
+import { initDatabase, userDb, chatDb } from './database.js';
 
 dotenv.config();
 
@@ -138,11 +138,26 @@ app.post('/api/logout', (req, res) => {
     res.json({ message: 'Logged out successfully' });
 });
 
-// Chat API route (now protected - requires login)
+// Chat API route (now protected - requires login with database logging)
 app.post('/api/chat', requireAuth, async (req, res) => {
     try {
         const { messages } = req.body;
+        const userId = req.user.userId;
         
+        console.log(`\n💬 Chat request from user ${userId} (${req.user.email})`);
+        
+        // Get or create current chat session
+        const session = await chatDb.getOrCreateCurrentSession(userId);
+        console.log(`📝 Using session: ${session.id}`);
+        
+        // Get the user's message (last message in the array)
+        const userMessage = messages[messages.length - 1];
+        if (userMessage && userMessage.role === 'user') {
+            // Save user message to database
+            await chatDb.saveMessage(session.id, 'user', userMessage.content);
+        }
+        
+        // Call Anthropic API
         const message = await anthropic.messages.create({
             model: 'claude-sonnet-4-20250514',
             max_tokens: 500,
@@ -164,16 +179,27 @@ app.post('/api/chat', requireAuth, async (req, res) => {
 
         // Extract token usage
         const usage = message.usage;
+        const assistantResponse = message.content[0].text;
+        
+        // Save assistant response to database
+        await chatDb.saveMessage(session.id, 'assistant', assistantResponse, usage.output_tokens);
+        
+        // Update session timestamp
+        await chatDb.updateSessionTimestamp(session.id);
+        
+        console.log(`✅ Chat completed - Session: ${session.id}, Tokens: ${usage.total}`);
         
         res.json({ 
-            response: message.content[0].text,
+            response: assistantResponse,
             tokens: {
                 input: usage.input_tokens,
                 output: usage.output_tokens,
                 total: usage.input_tokens + usage.output_tokens
-            }
+            },
+            session_id: session.id
         });
     } catch (error) {
+        console.error('💥 Chat error:', error);
         res.status(500).json({ error: 'Failed to get response' });
     }
 });
