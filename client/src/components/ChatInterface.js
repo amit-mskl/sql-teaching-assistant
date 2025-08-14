@@ -18,6 +18,18 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, course = 'sql' }) =
           avatar: '🤖',
           thinkingText: 'Tony is thinking...'
         };
+      case 'react':
+        return {
+          name: 'Steve Rogers',
+          avatar: '🛡️',
+          thinkingText: 'Steve is thinking...'
+        };
+      case 'python':
+        return {
+          name: 'Bruce Banner',
+          avatar: '🧬',
+          thinkingText: 'Bruce is analyzing...'
+        };
       default:
         return {
           name: 'Owlstein',

@@ -25,6 +25,18 @@ const Sidebar = ({ onNewChat, sessionTokens, showTokens, userName, course = 'sql
           title: 'Genius Database Architect',
           avatar: '🤖'
         };
+      case 'react':
+        return {
+          name: 'Steve Rogers',
+          title: 'Team Leader & Component Architect',
+          avatar: '🛡️'
+        };
+      case 'python':
+        return {
+          name: 'Bruce Banner',
+          title: 'Brilliant Data Scientist',
+          avatar: '🧬'
+        };
       default:
         return {
           name: 'Owlstein',

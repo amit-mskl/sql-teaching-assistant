@@ -58,36 +58,40 @@ const Discovery = () => {
           <div className="card-expertise">Advanced SQL • Database Optimization • Data Architecture</div>
         </div>
         
-        {/* React Course Card */}
-        <div className="learning-card react" onClick={startReactCourse}>
+        {/* Steve Rogers React Mentor Card */}
+        <div className="learning-card steve-rogers" onClick={startReactCourse}>
           <div className="card-header">
-            <div className="card-icons">
-              <div className="icon">⚛️</div>
-              <div className="icon">🟢</div>
+            <div className="avatar-section">
+              <div className="avatar-icon shield">🛡️</div>
+              <div className="avatar-name">Steve Rogers</div>
             </div>
-            <div className="card-badge badge-ai">🤖 AI-Guided</div>
+            <div className="card-badge badge-leader">⭐ Leader</div>
           </div>
           <div className="card-title">E-commerce App with React & Node</div>
+          <div className="card-subtitle">Learn from the principled team leader</div>
           <div className="card-meta">
-            <span>📚 8 Modules</span>
+            <span>🎯 Team-Focused</span>
             <span>⏱️ 6-8 hours</span>
           </div>
+          <div className="card-expertise">React Architecture • Component Design • Team Collaboration</div>
         </div>
         
-        {/* Python Course Card */}
-        <div className="learning-card python" onClick={startPythonCourse}>
+        {/* Bruce Banner Python Mentor Card */}
+        <div className="learning-card bruce-banner" onClick={startPythonCourse}>
           <div className="card-header">
-            <div className="card-icons">
-              <div className="icon">🐍</div>
-              <div className="icon">🧠</div>
+            <div className="avatar-section">
+              <div className="avatar-icon science">🧬</div>
+              <div className="avatar-name">Bruce Banner</div>
             </div>
-            <div className="card-badge badge-free">Free</div>
+            <div className="card-badge badge-scientist">🔬 Scientist</div>
           </div>
           <div className="card-title">Data Science Foundation</div>
+          <div className="card-subtitle">Learn from the brilliant data scientist</div>
           <div className="card-meta">
-            <span>📚 12 Modules</span>
+            <span>🔬 Scientific Method</span>
             <span>⏱️ 15-20 hours</span>
           </div>
+          <div className="card-expertise">Python Analysis • Machine Learning • Scientific Computing</div>
         </div>
       </div>
     </div>

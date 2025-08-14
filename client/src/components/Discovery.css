@@ -108,8 +108,8 @@
 
 /* Avatar-specific styling */
 .learning-card.tony-stark { --card-color: #FFD700; }
-.learning-card.react { --card-color: #059669; }
-.learning-card.python { --card-color: #eab308; }
+.learning-card.steve-rogers { --card-color: #1E40AF; }
+.learning-card.bruce-banner { --card-color: #059669; }
 
 /* Card Header */
 .card-header {
@@ -180,7 +180,6 @@
 .avatar-icon {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #FFD700, #FFA500);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -188,6 +187,23 @@
   font-size: 18px;
   color: #1a1a1a;
   font-weight: bold;
+}
+
+/* Tony Stark (default) */
+.avatar-icon {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+/* Steve Rogers */
+.avatar-icon.shield {
+  background: linear-gradient(135deg, #1E40AF, #3B82F6);
+  color: white;
+}
+
+/* Bruce Banner */
+.avatar-icon.science {
+  background: linear-gradient(135deg, #059669, #10B981);
+  color: white;
 }
 
 .avatar-name {
@@ -217,7 +233,19 @@
   font-weight: 600;
 }
 
-/* Tony Stark specific theming */
+.badge-leader {
+  background: linear-gradient(135deg, #1E40AF, #3B82F6);
+  color: white;
+  font-weight: 600;
+}
+
+.badge-scientist {
+  background: linear-gradient(135deg, #059669, #10B981);
+  color: white;
+  font-weight: 600;
+}
+
+/* Avatar-specific card theming */
 .learning-card.tony-stark {
   background: linear-gradient(135deg, #fefefe 0%, #fff8e1 100%);
   border: 1px solid #FFD700;
@@ -225,4 +253,22 @@
 
 .learning-card.tony-stark:hover {
   box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+}
+
+.learning-card.steve-rogers {
+  background: linear-gradient(135deg, #fefefe 0%, #eff6ff 100%);
+  border: 1px solid #1E40AF;
+}
+
+.learning-card.steve-rogers:hover {
+  box-shadow: 0 8px 24px rgba(30, 64, 175, 0.3);
+}
+
+.learning-card.bruce-banner {
+  background: linear-gradient(135deg, #fefefe 0%, #ecfdf5 100%);
+  border: 1px solid #059669;
+}
+
+.learning-card.bruce-banner:hover {
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
 }

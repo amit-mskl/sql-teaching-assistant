@@ -5,6 +5,10 @@ const Message = ({ content, isUser, course = 'sql' }) => {
     switch(courseId) {
       case 'sql':
         return { avatar: '🤖' };
+      case 'react':
+        return { avatar: '🛡️' };
+      case 'python':
+        return { avatar: '🧬' };
       default:
         return { avatar: '🦉' };
     }
