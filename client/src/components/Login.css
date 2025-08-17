@@ -173,3 +173,57 @@
   color: #9ca3af;
   cursor: not-allowed;
 }
+
+/* GitHub OAuth Styles */
+.login-divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+  text-align: center;
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.login-divider span {
+  padding: 0 16px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.github-login-button {
+  width: 100%;
+  background: #24292f;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.github-login-button:hover:not(:disabled) {
+  background: #1c2128;
+}
+
+.github-login-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.github-icon {
+  font-size: 18px;
+}

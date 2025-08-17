@@ -117,6 +117,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Set auth data directly (for OAuth callbacks)
+  const setAuthData = ({ token: newToken, user: newUser }) => {
+    console.log('🔐 Setting auth data from OAuth callback');
+    setToken(newToken);
+    setUser(newUser);
+    localStorage.setItem('owlstein_token', newToken);
+    localStorage.setItem('owlstein_user', JSON.stringify(newUser));
+  };
+
   // Check if user is logged in
   const isAuthenticated = !!token;
 
@@ -144,7 +153,8 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated,
     login,
     register,
-    logout
+    logout,
+    setAuthData
   };
 
   return (

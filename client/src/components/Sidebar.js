@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
 const Sidebar = ({ onNewChat, sessionTokens, showTokens, userName, course = 'sql' }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const formatTokens = (tokens) => {
     return tokens.toLocaleString();
   };
@@ -54,7 +54,14 @@ const Sidebar = ({ onNewChat, sessionTokens, showTokens, userName, course = 'sql
       <p>{branding.title}</p>
       
       <div className="user-info">
-        <div className="user-welcome">Welcome, {userName}!</div>
+        <div className="user-welcome">
+          Welcome, {userName}!
+          {user?.authProvider === 'github' && (
+            <span className="github-badge" title={`Logged in via GitHub (@${user.githubUsername})`}>
+              🐙
+            </span>
+          )}
+        </div>
         <button className="logout-btn" onClick={logout}>
           Sign Out
         </button>

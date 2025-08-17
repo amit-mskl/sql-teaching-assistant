@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import ChatApp from './components/ChatApp';
 import Discovery from './components/Discovery';
+import AuthCallback from './components/AuthCallback';
 
 // Authentication wrapper for protected routes
 const AuthenticatedRoute = ({ children }) => {
@@ -27,6 +28,9 @@ const AuthenticatedRoute = ({ children }) => {
 const AppContent = () => {
   return (
     <Routes>
+      {/* GitHub OAuth callback route (no auth required) */}
+      <Route path="/auth/callback" element={<AuthCallback />} />
+      
       {/* Direct SQL Bot access (existing functionality) */}
       <Route path="/" element={
         <AuthenticatedRoute>

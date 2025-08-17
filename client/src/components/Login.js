@@ -68,6 +68,20 @@ const Login = ({ onSwitchToSignup }) => {
           </button>
         </form>
 
+        <div className="login-divider">
+          <span>or</span>
+        </div>
+
+        <button 
+          type="button"
+          onClick={() => window.location.href = 'http://localhost:5000/auth/github'}
+          className="github-login-button"
+          disabled={isLoading}
+        >
+          <span className="github-icon">🐙</span>
+          Assemble with GitHub
+        </button>
+
         <div className="login-footer">
           <p>
             Don't have an account?{' '}
