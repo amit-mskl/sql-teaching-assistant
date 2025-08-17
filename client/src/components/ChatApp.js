@@ -26,10 +26,10 @@ const ChatApp = ({ course = 'sql' }) => {
           const data = await response.json();
           setWelcomeMessage(data.welcome);
           
-          // Set initial welcome message if conversation is empty
-          if (conversationHistory.length === 0) {
-            setConversationHistory([{ role: 'assistant', content: data.welcome }]);
-          }
+          // Set initial welcome message only when starting fresh
+          setConversationHistory(prev => 
+            prev.length === 0 ? [{ role: 'assistant', content: data.welcome }] : prev
+          );
         }
       } catch (error) {
         console.error('Failed to fetch welcome message:', error);
