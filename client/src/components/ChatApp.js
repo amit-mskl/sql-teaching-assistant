@@ -10,7 +10,7 @@ const ChatApp = ({ course = 'sql' }) => {
   const [sessionTokens, setSessionTokens] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [welcomeMessage, setWelcomeMessage] = useState('');
-  const { user, token } = useAuth();
+  const { token } = useAuth();
 
   // Fetch course welcome message when course changes
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { apiFetch } from '../utils/api';
 
@@ -29,7 +29,7 @@ const Message = ({ content, isUser, course = 'sql' }) => {
   };
 
   // Execute SQL query
-  const executeSQL = async (query) => {
+  const executeSQL = useCallback(async (query) => {
     if (!query || course !== 'sql') return;
     
     setIsExecuting(true);
@@ -54,7 +54,7 @@ const Message = ({ content, isUser, course = 'sql' }) => {
     } finally {
       setIsExecuting(false);
     }
-  };
+  }, [token, course]);
 
   // Auto-execute SQL when message contains SQL code and is from user (but not from Monaco Editor)
   useEffect(() => {
@@ -64,7 +64,7 @@ const Message = ({ content, isUser, course = 'sql' }) => {
         executeSQL(sqlQuery);
       }
     }
-  }, [content, isUser, course]);
+  }, [content, isUser, course, executeSQL]);
 
   // Render SQL results table
   const renderSQLResults = (results) => {

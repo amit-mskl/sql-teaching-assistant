@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import { apiFetch } from '../utils/api';
 
 const AuthContext = createContext();
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Logout function - Now calls backend API
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       console.log('👋 Logging out');
       
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('owlstein_token');
       localStorage.removeItem('owlstein_user');
     }
-  };
+  }, [token]);
 
   // Set auth data directly (for OAuth callbacks)
   const setAuthData = ({ token: newToken, user: newUser }) => {
@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }) => {
         logout();
       }
     }
-  }, []);
+  }, [logout]);
 
   const value = {
     user,

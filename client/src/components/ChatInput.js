@@ -4,7 +4,6 @@ import Editor from '@monaco-editor/react';
 const ChatInput = ({ onSendMessage, disabled, course = 'sql', latestMessage = null }) => {
   const [message, setMessage] = useState('');
   const [editorMode, setEditorMode] = useState('plain'); // 'plain', 'sql', 'markdown'
-  const [showModeSelector, setShowModeSelector] = useState(false);
 
   // Detect SQL templates in the latest assistant message
   useEffect(() => {
