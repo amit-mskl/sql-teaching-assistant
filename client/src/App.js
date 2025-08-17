@@ -31,10 +31,10 @@ const AppContent = () => {
       {/* GitHub OAuth callback route (no auth required) */}
       <Route path="/auth/callback" element={<AuthCallback />} />
       
-      {/* Direct SQL Bot access (existing functionality) */}
+      {/* Redirect to platform discovery page */}
       <Route path="/" element={
         <AuthenticatedRoute>
-          <ChatApp />
+          <Discovery />
         </AuthenticatedRoute>
       } />
       
