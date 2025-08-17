@@ -32,6 +32,37 @@ const Login = ({ onSwitchToSignup }) => {
           <p>Your SQL AI Buddy</p>
         </div>
 
+        {/* GitHub Authentication Section - Now Primary */}
+        <div className="github-auth-section">
+          <button 
+            type="button"
+            onClick={() => window.location.href = 'http://localhost:5000/auth/github'}
+            className="github-login-button"
+            disabled={isLoading}
+          >
+            <span className="github-icon">🐙</span>
+            Assemble with GitHub
+          </button>
+
+          <div className="github-signup-section">
+            <p className="github-signup-text">New to GitHub?</p>
+            <button 
+              type="button"
+              onClick={() => window.open('https://github.com/join', '_blank')}
+              className="github-signup-button"
+              disabled={isLoading}
+            >
+              <span className="github-icon">🐙</span>
+              Create GitHub Account
+            </button>
+          </div>
+        </div>
+
+        <div className="login-divider">
+          <span>or</span>
+        </div>
+
+        {/* Email/Password Section - Now Secondary */}
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email">Email</label>
@@ -67,20 +98,6 @@ const Login = ({ onSwitchToSignup }) => {
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-
-        <div className="login-divider">
-          <span>or</span>
-        </div>
-
-        <button 
-          type="button"
-          onClick={() => window.location.href = 'http://localhost:5000/auth/github'}
-          className="github-login-button"
-          disabled={isLoading}
-        >
-          <span className="github-icon">🐙</span>
-          Assemble with GitHub
-        </button>
 
         <div className="login-footer">
           <p>

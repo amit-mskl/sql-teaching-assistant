@@ -175,6 +175,10 @@
 }
 
 /* GitHub OAuth Styles */
+.github-auth-section {
+  margin-bottom: 24px;
+}
+
 .login-divider {
   display: flex;
   align-items: center;
@@ -226,4 +230,45 @@
 
 .github-icon {
   font-size: 18px;
+}
+
+/* GitHub signup section */
+.github-signup-section {
+  margin: 16px 0 24px 0;
+  text-align: center;
+}
+
+.github-signup-text {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+  margin-top: 0;
+}
+
+.github-signup-button {
+  width: 100%;
+  background: #21262d;
+  color: white;
+  border: 1px solid #30363d;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.github-signup-button:hover:not(:disabled) {
+  background: #30363d;
+  border-color: #484f58;
+}
+
+.github-signup-button:disabled {
+  background: #9ca3af;
+  border-color: #d1d5db;
+  cursor: not-allowed;
 }
