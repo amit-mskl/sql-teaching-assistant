@@ -28,8 +28,8 @@ const Login = ({ onSwitchToSignup }) => {
       <div className="login-card">
         <div className="login-header">
           <div className="login-logo">🦉</div>
-          <h1>Welcome to Owlstein</h1>
-          <p>Your SQL AI Buddy</p>
+          <h1>Welcome to Avengers Learning Academy</h1>
+          <p>Learn from your favorite AI avatars</p>
         </div>
 
         {/* GitHub Authentication Section - Now Primary */}
@@ -41,7 +41,7 @@ const Login = ({ onSwitchToSignup }) => {
             disabled={isLoading}
           >
             <span className="github-icon">🐙</span>
-            Assemble with GitHub
+            Login with GitHub
           </button>
 
           <div className="github-signup-section">
@@ -53,7 +53,7 @@ const Login = ({ onSwitchToSignup }) => {
               disabled={isLoading}
             >
               <span className="github-icon">🐙</span>
-              Create GitHub Account
+              Sign up on GitHub
             </button>
           </div>
         </div>
