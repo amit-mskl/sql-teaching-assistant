@@ -65,13 +65,16 @@ export const authService = {
 
   // Generate JWT token
   generateToken: (user) => {
-    console.log(`🎟️ Generating token for user: ${user.email}`);
+    console.log(`🎟️ Generating token for user: ${user.email} (${user.auth_provider || 'local'})`);
     const payload = {
       userId: user.id,
       email: user.email,
       name: user.display_name, // Using display_name from database
       firstName: user.first_name,
-      lastName: user.last_name
+      lastName: user.last_name,
+      authProvider: user.auth_provider || 'local',
+      githubUsername: user.github_username || null,
+      avatarUrl: user.avatar_url || null
     };
     return jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
   },

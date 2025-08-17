@@ -3,6 +3,9 @@ import Anthropic from '@anthropic-ai/sdk';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import passport from 'passport';
+import { Strategy as GitHubStrategy } from 'passport-github2';
+import session from 'express-session';
 import { authService, requireAuth } from './auth.js';
 import { initDatabase, userDb, chatDb } from './database.js';
 import { generateOwlsteinPrompt, getCourseWelcome } from './courseContexts.js';
@@ -21,6 +24,68 @@ const anthropic = new Anthropic({
 });
 
 app.use(express.json());
+
+// Session configuration for Passport
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // Set to true in production with HTTPS
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport session serialization
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await userDb.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+});
+
+// GitHub OAuth Strategy
+passport.use(new GitHubStrategy({
+  clientID: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  callbackURL: "http://localhost:5000/auth/github/callback"
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    console.log('🐙 GitHub OAuth callback received');
+    console.log('📋 GitHub profile:', { 
+      id: profile.id, 
+      username: profile.username, 
+      displayName: profile.displayName,
+      email: profile.emails?.[0]?.value 
+    });
+
+    // Check if user already exists
+    let user = await userDb.findByGithubId(profile.id);
+    
+    if (user) {
+      console.log('✅ Existing GitHub user found');
+      await userDb.updateLastLogin(user.id);
+      return done(null, user);
+    }
+
+    // Create new GitHub user
+    console.log('👤 Creating new GitHub user');
+    user = await userDb.createGithubUser(profile);
+    await userDb.updateLastLogin(user.id);
+    
+    return done(null, user);
+  } catch (error) {
+    console.error('❌ GitHub OAuth error:', error);
+    return done(error, null);
+  }
+}));
 
 // Serve static files from the React build directory
 app.use(express.static(path.join(__dirname, '../client/build')));
@@ -139,6 +204,32 @@ app.post('/api/logout', (req, res) => {
     console.log('👋 User logged out');
     res.json({ message: 'Logged out successfully' });
 });
+
+// GitHub OAuth Routes
+app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
+
+app.get('/auth/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login?error=github_auth_failed' }),
+  async (req, res) => {
+    try {
+      console.log('✅ GitHub OAuth successful');
+      
+      // Generate JWT token for the user
+      const token = authService.generateToken(req.user);
+      
+      // Update last login
+      await userDb.updateLastLogin(req.user.id);
+      
+      // Redirect to frontend with token
+      // In development, redirect to React app with token in URL params
+      res.redirect(`http://localhost:3000/auth/callback?token=${token}`);
+      
+    } catch (error) {
+      console.error('❌ Error in GitHub callback:', error);
+      res.redirect('/login?error=auth_callback_failed');
+    }
+  }
+);
 
 // Get course welcome message
 app.get('/api/course/:courseId/welcome', requireAuth, (req, res) => {

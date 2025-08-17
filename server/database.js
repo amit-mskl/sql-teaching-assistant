@@ -31,10 +31,14 @@ export const initDatabase = () => {
         CREATE TABLE IF NOT EXISTS users (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           email TEXT UNIQUE NOT NULL,
-          password_hash TEXT NOT NULL,
+          password_hash TEXT,
           first_name TEXT NOT NULL,
           last_name TEXT,
           display_name TEXT,
+          github_id TEXT UNIQUE,
+          github_username TEXT,
+          avatar_url TEXT,
+          auth_provider TEXT DEFAULT 'local',
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           is_active BOOLEAN DEFAULT 1,
@@ -227,6 +231,76 @@ export const userDb = {
           resolve();
         }
       });
+    });
+  },
+
+  // GitHub OAuth specific functions
+  // Find user by GitHub ID
+  findByGithubId: async (githubId) => {
+    return new Promise((resolve, reject) => {
+      console.log(`🔍 Looking up user by GitHub ID: ${githubId}`);
+      
+      db.get(`
+        SELECT id, email, first_name, last_name, display_name, github_id, 
+               github_username, avatar_url, auth_provider, created_at, last_login, is_active 
+        FROM users 
+        WHERE github_id = ? AND is_active = 1
+      `, [githubId], (err, row) => {
+        if (err) {
+          console.error('❌ Database error:', err);
+          reject(err);
+        } else {
+          if (row) {
+            console.log(`✅ GitHub user found: ${row.display_name} (@${row.github_username})`);
+          } else {
+            console.log(`❌ GitHub user not found: ${githubId}`);
+          }
+          resolve(row);
+        }
+      });
+    });
+  },
+
+  // Create new GitHub user
+  createGithubUser: async (githubProfile) => {
+    return new Promise((resolve, reject) => {
+      const { id: githubId, username, displayName, emails, photos } = githubProfile;
+      const email = emails && emails[0] ? emails[0].value : `${username}@github.local`;
+      const avatarUrl = photos && photos[0] ? photos[0].value : null;
+      const firstName = displayName || username;
+      
+      console.log(`👤 Creating GitHub user: ${username} (${email})`);
+      
+      const stmt = db.prepare(`
+        INSERT INTO users (email, first_name, display_name, github_id, github_username, avatar_url, auth_provider) 
+        VALUES (?, ?, ?, ?, ?, ?, 'github')
+      `);
+      
+      stmt.run([email, firstName, displayName || username, githubId, username, avatarUrl], function(err) {
+        if (err) {
+          if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+            console.log(`❌ GitHub user already exists: ${email} or GitHub ID: ${githubId}`);
+            reject(new Error('GITHUB_USER_EXISTS'));
+          } else {
+            console.error('❌ Error creating GitHub user:', err);
+            reject(err);
+          }
+        } else {
+          console.log(`✅ GitHub user created with ID: ${this.lastID}`);
+          resolve({
+            id: this.lastID,
+            email,
+            first_name: firstName,
+            display_name: displayName || username,
+            github_id: githubId,
+            github_username: username,
+            avatar_url: avatarUrl,
+            auth_provider: 'github'
+          });
+        }
+      });
+      
+      stmt.finalize();
     });
   }
 };
