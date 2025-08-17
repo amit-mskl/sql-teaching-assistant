@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { apiFetch } from '../utils/api';
 import UserHeader from './UserHeader';
 import Sidebar from './Sidebar';
 import ChatInterface from './ChatInterface';
@@ -15,7 +16,7 @@ const ChatApp = ({ course = 'sql' }) => {
   useEffect(() => {
     const fetchWelcomeMessage = async () => {
       try {
-        const response = await fetch(`/api/course/${course}/welcome`, {
+        const response = await apiFetch(`/api/course/${course}/welcome`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -51,7 +52,7 @@ const ChatApp = ({ course = 'sql' }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await apiFetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

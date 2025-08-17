@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { apiFetch } from '../utils/api';
 
 const Message = ({ content, isUser, course = 'sql' }) => {
   const [sqlResults, setSqlResults] = useState(null);
@@ -33,7 +34,7 @@ const Message = ({ content, isUser, course = 'sql' }) => {
     
     setIsExecuting(true);
     try {
-      const response = await fetch('/api/execute-sql', {
+      const response = await apiFetch('/api/execute-sql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

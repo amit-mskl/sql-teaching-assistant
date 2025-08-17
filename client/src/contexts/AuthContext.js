@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { apiFetch } from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -21,7 +22,7 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('🔄 Real API login attempt:', email);
       
-      const response = await fetch('/api/login', {
+      const response = await apiFetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +61,7 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log('🔄 Registration attempt:', email);
       
-      const response = await fetch('/api/register', {
+      const response = await apiFetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ export const AuthProvider = ({ children }) => {
       console.log('👋 Logging out');
       
       // Call logout API (optional - mainly for logging)
-      await fetch('/api/logout', {
+      await apiFetch('/api/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

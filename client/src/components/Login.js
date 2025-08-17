@@ -36,7 +36,7 @@ const Login = ({ onSwitchToSignup }) => {
         <div className="github-auth-section">
           <button 
             type="button"
-            onClick={() => window.location.href = 'http://localhost:5000/auth/github'}
+            onClick={() => window.location.href = `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/auth/github`}
             className="github-login-button"
             disabled={isLoading}
           >

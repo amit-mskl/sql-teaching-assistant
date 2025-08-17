@@ -30,7 +30,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false } // Set to true in production with HTTPS
+  cookie: { secure: process.env.NODE_ENV === 'production' } // Enable secure cookies in production
 }));
 
 // Initialize Passport
@@ -55,7 +55,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: "http://localhost:5000/auth/github/callback"
+  callbackURL: process.env.GITHUB_CALLBACK_URL || "http://localhost:5000/auth/github/callback"
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     console.log('🐙 GitHub OAuth callback received');
@@ -222,7 +222,7 @@ app.get('/auth/github/callback',
       
       // Redirect to frontend with token
       // In development, redirect to React app with token in URL params
-      res.redirect(`http://localhost:3000/auth/callback?token=${token}`);
+      res.redirect(`${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/callback?token=${token}`);
       
     } catch (error) {
       console.error('❌ Error in GitHub callback:', error);
