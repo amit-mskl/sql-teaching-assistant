@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import UserHeader from './UserHeader';
 import './Discovery.css';
 
 const Discovery = () => {
@@ -18,8 +19,10 @@ const Discovery = () => {
   };
   
   return (
-    <div className="discovery-container">
-      {/* Header Section */}
+    <>
+      <UserHeader />
+      <div className="discovery-container">
+        {/* Header Section */}
       <div className="discovery-header">
         <h2>Crafted by industry experts</h2>
         <p>AI-powered personalized learning experiences</p>
@@ -95,6 +98,7 @@ const Discovery = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

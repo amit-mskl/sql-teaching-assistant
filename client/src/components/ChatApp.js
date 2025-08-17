@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import UserHeader from './UserHeader';
 import Sidebar from './Sidebar';
 import ChatInterface from './ChatInterface';
 
@@ -83,15 +84,17 @@ const ChatApp = ({ course = 'sql' }) => {
         onNewChat={startNewChat}
         sessionTokens={sessionTokens}
         showTokens={sessionTokens > 0}
-        userName={user?.name}
         course={course}
       />
-      <ChatInterface 
-        messages={conversationHistory}
-        onSendMessage={sendMessage}
-        isLoading={isLoading}
-        course={course}
-      />
+      <div className="main-content">
+        <UserHeader />
+        <ChatInterface 
+          messages={conversationHistory}
+          onSendMessage={sendMessage}
+          isLoading={isLoading}
+          course={course}
+        />
+      </div>
     </div>
   );
 };
